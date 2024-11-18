@@ -38,3 +38,19 @@ services:
         volumes:
             - ~/.flowise:/root/.flowise
         entrypoint: /bin/sh -c "sleep 3; flowise start"
+            labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.flowiseai.rule=Host(`flowise.sebrichs.xyz`)"
+      - "traefik.http.routers.flowiseai.entrypoints=websecure"
+      - "traefik.http.routers.flowiseai.tls.certResolver=letsencrypt"
+      - "traefik.http.services.flowiseai.loadbalancer.server.port=3000"
+
+volumes:
+  flowiseai:
+    driver: local
+  flowise-db-data:
+    driver: local
+
+networks:
+  dokploy-network:
+    external: true
